@@ -1,0 +1,97 @@
+/*!
+    Theme: devibeans (dark)
+    Author: @terminaldweller
+    Maintainer: @terminaldweller
+
+    Inspired by vim's jellybeans theme (https://github.com/nanotech/jellybeans.vim)
+*/
+
+.vscode-light .hljs {
+  background: #000000;
+  color: #a39e9b;
+}
+
+.vscode-light .hljs-attr,
+.vscode-light .hljs-template-tag {
+  color: #8787d7;
+}
+
+.vscode-light .hljs-comment,
+.vscode-light .hljs-doctag,
+.vscode-light .hljs-quote {
+  color: #339966;
+}
+
+.vscode-light .hljs-params {
+  color: #a39e9b;
+}
+
+.vscode-light .hljs-regexp {
+  color: #d700ff;
+}
+
+.vscode-light .hljs-tag,
+.vscode-light .hljs-selector-id,
+.vscode-light .hljs-number,
+.vscode-light .hljs-literal {
+  color: #ef5350;
+}
+
+.vscode-light .hljs-meta,
+.vscode-light .hljs-meta .hljs-keyword {
+
+  color: #0087ff;
+}
+
+/* opt-out */
+.vscode-light .hljs-operator,
+.vscode-light .hljs-punctuation{
+}
+
+.vscode-light .hljs-selector-class,
+.vscode-light .hljs-code,
+.vscode-light .hljs-formula,
+.vscode-light .hljs-variable,
+.vscode-light .hljs-template-variable,
+.vscode-light .hljs-selector-attr,
+.vscode-light .hljs-selector-pseudo,
+.vscode-light .hljs-link,
+.vscode-light .hljs-keyword {
+  color: #64b5f6;
+}
+
+.vscode-light .hljs-built_in,
+.vscode-light .hljs-title,
+.vscode-light .hljs-deletion {
+  color: #ff8700;
+}
+
+.vscode-light .hljs-type,
+.vscode-light .hljs-section,
+.vscode-light .hljs-function,
+.vscode-light .hljs-name,
+.vscode-light .hljs-property,
+.vscode-light .hljs-attribute {
+  color: #ffd75f;
+}
+
+.vscode-light .hljs-meta .hljs-string,
+.vscode-light .hljs-string,
+.vscode-light .hljs-subst,
+.vscode-light .hljs-symbol,
+.vscode-light .hljs-bullet,
+.vscode-light .hljs-addition {
+  color: #558b2f;
+}
+
+.vscode-light .hljs-selector-tag {
+  color: #9966ff;
+}
+
+.vscode-light .hljs-emphasis {
+  font-style: italic;
+}
+
+.vscode-light .hljs-strong {
+  font-weight: bold;
+}

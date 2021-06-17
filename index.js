@@ -6,14 +6,6 @@ const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAnchorTOC = require('markdown-it-toc-done-right');
 
-
-/**
- * TOC: in md use one of:
- * ${toc}, [[toc]], [toc], [[_toc_]]
- */
-
-
-
 const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_baidu_work/baidu_mario_from_scratch.md';
 const TPL_PATH = '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/index.tpl.html'
 const STYLE_FILES = [
@@ -34,8 +26,11 @@ const STYLE_FILES = [
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/stackoverflow-dark.css',
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/a11y-dark.css',
 
+    '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/mixu-page-ss/gen/devibeans.standalone.css', // best
+
+
     // Code themes:
-    '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/devibeans.css', // best
+    // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/devibeans.css', // best
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/github-dark.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/pojoaque.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/stackoverflow-dark.css', // ok
@@ -83,9 +78,9 @@ const md = require('markdown-it')({
     // highlight: function (/*str, lang*/) { return ''; }
     highlight: function (str, lang) {
         if (lang && hljs.getLanguage(lang)) {
-            return '<pre class="hljs">' +
+            return '<pre class="hljs"><code>' +
                 hljs.highlight(str, { language: lang }).value +
-                '</pre>';
+                '</code></pre>';
             // return hljs.highlight(str, { language: lang }).value;
         }
         return ''; // use external default escaping
@@ -127,39 +122,7 @@ function pluginReplaceImageToDataURI(md, opt) {
     });
 }
 
-function pluginFindOutline(md, opt) {
-    const outline = [];
-
-    md.core.ruler.after('inline', 'find-outline', function (state) {
-        let headingOpenToken;
-        let headingTokens;
-        for (let i = 0; i < state.tokens.length; i++) {
-            token = state.tokens[i];
-            if (token.type === 'heading_open') {
-                headingOpenToken = token;
-                headingTokens = [];
-            }
-            else if (token.type === 'heading_close') {
-                addOutline(headingOpenToken, headingTokens);
-            }
-            else {
-                headingTokens.push(token);
-                headingTokens = null;
-            }
-        }
-    });
-
-    function addOutline(headingOpenToken, headingTokens) {
-        if (!headingOpenToken || !headingTokens) {
-            return;
-        }
-        for (const token of headingTokens) {
-        }
-    }
-}
-
-
-function run() {
+async function run() {
     const fileContent = fs.readFileSync(SRC_PATH, {encoding: 'utf8'});
 
     const body = md.render(fileContent);
@@ -169,7 +132,9 @@ function run() {
 
     const styleContent = [];
     for (const styleFile of STYLE_FILES) {
-        styleContent.push(fs.readFileSync(styleFile, {encoding: 'utf8'}));
+        const styleFileContent = fs.readFileSync(styleFile, {encoding: 'utf8'});
+
+        styleContent.push(styleFileContent);
     }
     htmlContent = htmlContent.replace('{{MARK_DOWN_IT_STYLE}}', styleContent.join('\n'));
 
