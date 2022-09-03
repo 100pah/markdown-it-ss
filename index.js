@@ -6,7 +6,16 @@ const hljs = require('highlight.js');
 const markdownItAnchor = require('markdown-it-anchor');
 const markdownItAnchorTOC = require('markdown-it-toc-done-right');
 
-const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_baidu_work/baidu_mario_from_scratch.md';
+const CLI_RED_COLOR = '\033[0;31m';
+const CLI_GREEN_COLOR = '\033[0;32m';
+const CLI_RESET_COLOR ='\033[0m';
+
+
+// const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_slides/baidu_mario_from_scratch/baidu_mario_from_scratch.md';
+// const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_slides/bundler_design_case/bundler_design_case.md';
+const SRC_PATH = process.argv[2];
+console.log(`${CLI_GREEN_COLOR} src path: "${SRC_PATH}" ${CLI_RESET_COLOR}`);
+
 const TPL_PATH = '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/index.tpl.html'
 const STYLE_FILES = [
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/markdown-styles/layouts/github/assets/css/github-markdown.css',
@@ -139,6 +148,12 @@ async function run() {
     htmlContent = htmlContent.replace('{{MARK_DOWN_IT_STYLE}}', styleContent.join('\n'));
 
     fs.writeFileSync(outputHTMLPath, htmlContent);
+
+    console.log('Done');
+    console.log('Please visit:');
+    console.log(
+        `${CLI_GREEN_COLOR} open ${outputHTMLPath} ${CLI_RESET_COLOR}`
+    );
 }
 
 run();

@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-size: 16px;
     line-height: 1.5;
@@ -58,8 +62,12 @@ h2 {
     padding-bottom: 5px;
 }
 
-h3 {
-    margin-top: 2.5em;
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 3.5em;
+    margin-bottom: 2em;
+}
+h2, h3, h4, h5, h6 {
+    color: #393939;
 }
 
 hr {
@@ -105,12 +113,23 @@ pre, pre.hljs {
     margin-top: 10px;
     line-height: 1.5em;
 }
+.table-of-contents li a {
+    /* padding: 3px 5px; */
+}
 .table-of-contents li::marker {
     color: #aaa;
 }
-.table-of-contents > ol > li > ol > li::marker {
-    color: rgba(0,0,0,0);
+.table-of-contents li a.active {
+    /* background-color: rgb(58, 135, 198); */
+    /* color: #fff; */
+    /* border-radius: 2px; */
+    color: rgb(72, 135, 199);
+    /* font-weight: 700; */
 }
+/* .table-of-contents > ol > li > ol > li::marker {
+    color: rgba(0,0,0,0);
+} */
 .table-of-contents a {
     color: #666;
+    transition: all 100ms ease-in-out;
 }

@@ -4,6 +4,7 @@
     <head>
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <base target="_blank">
         <style>
             {{MARK_DOWN_IT_STYLE}}
         </style>
@@ -14,6 +15,29 @@
             {{MARK_DOWN_IT_BODY}}
             </div>
         </div>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', () => {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        const id = entry.target.getAttribute('id');
+                        const el = document.querySelector(`nav.table-of-contents li a[href="#${id}"]`);
+                        if (el) {
+                            if (entry.intersectionRatio > 0) {
+                                el.classList.add('active');
+                            } else {
+                                el.classList.remove('active');
+                            }
+                        }
+                    });
+                });
+                for (let hLevel = 1; hLevel <= 5; hLevel++) {
+                    document.querySelectorAll(`h${hLevel}[id]`).forEach((section) => {
+                        observer.observe(section);
+                    });
+                }
+            });
+        </script>
 
     </body>
 </html>
