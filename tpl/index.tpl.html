@@ -18,6 +18,14 @@
 
         <script>
             window.addEventListener('DOMContentLoaded', () => {
+
+                document.querySelectorAll('.header-anchor').forEach(anchor => {
+                    anchor.setAttribute('target', '_self');
+                });
+                document.querySelectorAll('.table-of-contents a').forEach(anchor => {
+                    anchor.setAttribute('target', '_self');
+                });
+
                 const observer = new IntersectionObserver(entries => {
                     entries.forEach(entry => {
                         const id = entry.target.getAttribute('id');
