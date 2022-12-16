@@ -32,6 +32,7 @@ function printHelp() {
     console.log();
     console.log(`${CLI_CYAN_COLOR}[Usage]: ${CLI_RESET_COLOR}`);
     console.log();
+    // ${toc}, [[toc]], [toc], [[_toc_]] are OK.
     console.log(`If you need TOC, please add ${CLI_CYAN_COLOR}[[toc]]${CLI_RESET_COLOR} in your markdown.`);
     console.log();
     console.log(`If you need video, convert mov to awebp by ${CLI_CYAN_COLOR}ffmpegmov2mp4 assets/some.mov${CLI_RESET_COLOR}`);
