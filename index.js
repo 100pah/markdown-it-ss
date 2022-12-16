@@ -16,11 +16,18 @@ const CLI_CYAN_COLOR = '\033[0;36m';
 const CLI_RESET_COLOR ='\033[0m';
 
 
-const SRC_PATH = process.argv[2].trim();
+const cmdArg = process.argv[2].trim();
 
-if (SRC_PATH === '--help' || SRC_PATH === '-h') {
+if (cmdArg === '--help' || cmdArg === '-h') {
     printHelp();
     process.exit(0);
+}
+
+if (cmdArg === '--test') {
+    SRC_PATH = nodePath.join(__dirname, 'test/test.md');
+}
+else {
+    SRC_PATH = cmdArg;
 }
 
 if (!SRC_PATH) {
@@ -86,7 +93,6 @@ assert(srcPathParsed.name);
 const outputHTMLPath = nodePath.join(
     '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/output', srcPathParsed.name + '.html'
 );
-
 
 // full options list (defaults)
 const md = require('markdown-it')({
