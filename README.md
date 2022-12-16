@@ -19,7 +19,12 @@ See `package.json`.
 Change input path in `index.js`
 
 ## Usage
-```
-mditss --help
-```
++ Compile
+    ```shell
+    mditss some.md
+    ```
++ Help
+    ```shell
+    mditss --help
+    ```
 
