@@ -114,6 +114,9 @@ pre, pre.hljs {
     padding-left: 10px;
     margin: 0;
 }
+.table-of-contents > ol > li {
+    margin-top: 16px;
+}
 .table-of-contents li {
     /* margin-top: 8px; */
     line-height: 1.5em;
