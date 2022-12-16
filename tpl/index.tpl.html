@@ -14,36 +14,78 @@
             <div class="markdown-body">
             {{MARK_DOWN_IT_BODY}}
             </div>
+
+            <div id="img-large-view" style="display: none;">
+                <img id="img-large-view-img"/>
+                <!-- <div id="img-large-view-close">X</div> -->
+            </div>
         </div>
 
         <script>
             window.addEventListener('DOMContentLoaded', () => {
 
-                document.querySelectorAll('.header-anchor').forEach(anchor => {
-                    anchor.setAttribute('target', '_self');
-                });
-                document.querySelectorAll('.table-of-contents a').forEach(anchor => {
-                    anchor.setAttribute('target', '_self');
-                });
-
-                const observer = new IntersectionObserver(entries => {
-                    entries.forEach(entry => {
-                        const id = entry.target.getAttribute('id');
-                        const el = document.querySelector(`nav.table-of-contents li a[href="#${id}"]`);
-                        if (el) {
-                            if (entry.intersectionRatio > 0) {
-                                el.classList.add('active');
-                            } else {
-                                el.classList.remove('active');
-                            }
-                        }
+                function baseSet() {
+                    document.querySelectorAll('.header-anchor').forEach(anchor => {
+                        anchor.setAttribute('target', '_self');
                     });
-                });
-                for (let hLevel = 1; hLevel <= 5; hLevel++) {
-                    document.querySelectorAll(`h${hLevel}[id]`).forEach((section) => {
-                        observer.observe(section);
+                    document.querySelectorAll('.table-of-contents a').forEach(anchor => {
+                        anchor.setAttribute('target', '_self');
                     });
                 }
+
+                function initScrollObserver() {
+                    const observer = new IntersectionObserver(entries => {
+                        entries.forEach(entry => {
+                            const id = entry.target.getAttribute('id');
+                            const el = document.querySelector(`nav.table-of-contents li a[href="#${id}"]`);
+                            if (el) {
+                                if (entry.intersectionRatio > 0) {
+                                    el.classList.add('active');
+                                } else {
+                                    el.classList.remove('active');
+                                }
+                            }
+                        });
+                    });
+                    for (let hLevel = 1; hLevel <= 5; hLevel++) {
+                        document.querySelectorAll(`h${hLevel}[id]`).forEach((section) => {
+                            observer.observe(section);
+                        });
+                    }
+                }
+
+                function initImageClickShowLarge() {
+                    const largeViewEl = document.getElementById('img-large-view');
+                    // const largeViewCloseEl = document.getElementById('img-large-view-close');
+                    const largeViewImageEl = document.getElementById('img-large-view-img');
+
+                    document.addEventListener('click', function (event) {
+                        const targetEl = event.target;
+                        if (isLargeShowing()) {
+                            closeLargeView();
+                        }
+                        else if (targetEl.tagName.toLowerCase() === 'img') {
+                            showLargeView(targetEl.getAttribute('src'));
+                        }
+                    }, {passive: true});
+
+                    function isLargeShowing() {
+                        return largeViewEl.style.display !== 'none'
+                    }
+
+                    function showLargeView(src) {
+                        largeViewImageEl.src = src;
+                        largeViewEl.style.display = 'block';
+                    }
+
+                    function closeLargeView() {
+                        largeViewEl.style.display = 'none';
+                    }
+                }
+
+                baseSet();
+                initScrollObserver();
+                initImageClickShowLarge();
             });
         </script>
 

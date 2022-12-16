@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+// --inspect --inspect-brk
+
 const fs = require('fs')
 // const fse = require('fs-extra');
 const nodePath = require('path');
@@ -8,25 +12,52 @@ const markdownItAnchorTOC = require('markdown-it-toc-done-right');
 
 const CLI_RED_COLOR = '\033[0;31m';
 const CLI_GREEN_COLOR = '\033[0;32m';
+const CLI_CYAN_COLOR = '\033[0;36m';
 const CLI_RESET_COLOR ='\033[0m';
 
 
-// const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_slides/baidu_mario_from_scratch/baidu_mario_from_scratch.md';
-// const SRC_PATH = '/Users/s/sushuangwork/met/_NOTE/_TEXT_NOTE/_MAIN_/_slides/bundler_design_case/bundler_design_case.md';
-const SRC_PATH = process.argv[2];
+const SRC_PATH = process.argv[2].trim();
+
+if (SRC_PATH === '--help' || SRC_PATH === '-h') {
+    printHelp();
+    process.exit(0);
+}
+
+if (!SRC_PATH) {
+    console.error('Error: need to input src path');
+    process.exit(1);
+}
+
+function printHelp() {
+    console.log();
+    console.log(`${CLI_CYAN_COLOR}[Usage]: ${CLI_RESET_COLOR}`);
+    console.log();
+    console.log(`If you need TOC, please add ${CLI_CYAN_COLOR}[[toc]]${CLI_RESET_COLOR} in your markdown.`);
+    console.log();
+    console.log(`If you need video, convert mov to awebp by ${CLI_CYAN_COLOR}ffmpegmov2mp4 assets/some.mov${CLI_RESET_COLOR}`);
+    console.log();
+    console.log(`If you need multiple images in a line:`);
+    console.log(`${CLI_CYAN_COLOR}
+<!-- Use image original width -->
+<ul class="img-line">
+    <li><img src="assets/my_img1.png"/></li>
+    <li><img src="assets/my_img2.png"/></li>
+</ul>
+<!-- Adjust width by flex: number -->
+<ul class="img-line">
+    <li style="flex: 2"><img src="assets/my_img1.png"/></li>
+    <li style="flex: 5"><img src="assets/my_img2.png"/></li>
+</ul>
+    ${CLI_RESET_COLOR}`);
+}
+
 console.log(`${CLI_GREEN_COLOR} src path: "${SRC_PATH}" ${CLI_RESET_COLOR}`);
 
 const TPL_PATH = '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/index.tpl.html'
 const STYLE_FILES = [
-    // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/markdown-styles/layouts/github/assets/css/github-markdown.css',
-
-    // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/markdown-styles/layouts/markedapp-byword/assets/style.css', // ok
-    // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/markdown-styles/layouts/markedapp-byword/assets/pilcrow.css', // ok
-
     '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/mixu-page-ss/style.css', // ok
     '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/mixu-page-ss/pilcrow.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/markdown-styles/tpl/theme/mixu-page/hljs-github.min.css',
-
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/vscode/markdown.css',
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/github-markdown-css/github-markdown.css',
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/github/markdown.css',
@@ -34,17 +65,13 @@ const STYLE_FILES = [
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/tomorrow-night-blue.css'
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/stackoverflow-dark.css',
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/a11y-dark.css',
-
     '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/mixu-page-ss/gen/devibeans.standalone.css', // best
-
-
     // Code themes:
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/devibeans.css', // best
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/github-dark.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/pojoaque.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/stackoverflow-dark.css', // ok
     // '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/node_modules/highlight.js/styles/vs2015.css', // ok
-
     '/Users/s/sushuangwork/met/act/gitall/markdown-it-ss/tpl/theme/mixu-page-ss/custom.css',
 ];
 
@@ -95,7 +122,7 @@ const md = require('markdown-it')({
         return ''; // use external default escaping
     }
 })
-    .use(pluginReplaceImageToDataURI)
+    // .use(pluginReplaceImageToDataURI)
     .use(markdownItAnchor, {
         permalink: true,
         permalinkBefore: true,
@@ -106,35 +133,74 @@ const md = require('markdown-it')({
         level: 2
     });
 
+function getAssetAbsPath(srcVal) {
+    return nodePath.join(srcPathParsed.dir, srcVal);
+}
 
-function pluginReplaceImageToDataURI(md, opt) {
-    md.core.ruler.after('inline', 'image-data-uri', function (state) {
-        state.tokens.forEach(function (blockToken) {
-            if (blockToken.type !== 'inline' || !blockToken.children) {
-                return;
-            }
-            blockToken.children.forEach(function (token) {
-                token.type === 'image' && token.attrs.forEach(function (attr) {
-                    if (attr[0] === 'src') {
-                        const srcVal = attr[1];
-                        const imgAbsPath = nodePath.join(srcPathParsed.dir, srcVal);
-                        const imgAbsPathParsed = nodePath.parse(imgAbsPath);
-                        assert(imgAbsPathParsed.ext, `Illegal image path "${imgAbsPath}"`);
+function convertToDataURL(srcVal, mimeTypePart) {
+    if (isDataURL(srcVal)) {
+        return srcVal;
+    }
+    assert(mimeTypePart);
+    const imgAbsPath = getAssetAbsPath(srcVal);
+    const imgAbsPathParsed = nodePath.parse(imgAbsPath);
+    assert(imgAbsPathParsed.ext, `Illegal image path "${imgAbsPath}"`);
 
-                        const contentsBase64 = fs.readFileSync(imgAbsPath, {encoding: 'base64'});
-                        const datURI = `data:image/${imgAbsPathParsed.ext.replace('.', '')};base64,${contentsBase64}`;
-                        attr[1] = datURI;
-                    }
-                });
-            });
+    const contentsBase64 = fs.readFileSync(imgAbsPath, {encoding: 'base64'});
+    return `data:${mimeTypePart}/${imgAbsPathParsed.ext.replace('.', '')};base64,${contentsBase64}`;
+}
+
+function isDataURL(srcVal) {
+    return /^\s*data:/.test(srcVal);
+}
+
+function convertAllDataURLInHTMLTag(inputContent) {
+    const tagReg = /<(video|VIDEO|img|IMG)[^>]+/g;
+    const attrReg1 = /\s+src\s*=\s*"([^"]+)/g;
+    const attrReg2 = /\s+src\s*=\s*'([^']+)/g;
+
+    const mimeTypePartMap = {
+        video: 'video',
+        img: 'image'
+    };
+
+    return inputContent.replace(tagReg, function (allMatched, tagName) {
+        const mimeTypePart = mimeTypePartMap[tagName.toLowerCase()];
+        let result = allMatched;
+        result = result.replace(attrReg1, function (_, srcVal) {
+            return ` src="${convertToDataURL(srcVal, mimeTypePart)}`;
         });
+        result = result.replace(attrReg2, function (_, srcVal) {
+            return ` src='${convertToDataURL(srcVal, mimeTypePart)}`;
+        });
+        return result;
     });
 }
+
+// function pluginReplaceImageToDataURI(md, opt) {
+//     md.core.ruler.after('inline', 'my-image-data-uri', function (state) {
+//         state.tokens.forEach(function (blockToken) {
+//             if (blockToken.type !== 'inline' || !blockToken.children) {
+//                 return;
+//             }
+//             blockToken.children.forEach(function (token) {
+//                 token.type === 'image' && token.attrs.forEach(function (attr) {
+//                     if (attr[0] === 'src') {
+//                         const srcVal = attr[1];
+//                         attr[1] = convertToDataURL(srcVal, 'image');
+//                     }
+//                 });
+//             });
+//         });
+//     });
+// }
 
 async function run() {
     const fileContent = fs.readFileSync(SRC_PATH, {encoding: 'utf8'});
 
-    const body = md.render(fileContent);
+    let body = md.render(fileContent);
+
+    body = convertAllDataURLInHTMLTag(body);
 
     const tplContent = fs.readFileSync(TPL_PATH, {encoding: 'utf8'});
     let htmlContent = tplContent.replace('{{MARK_DOWN_IT_BODY}}', body);
@@ -154,6 +220,8 @@ async function run() {
     console.log(
         `${CLI_GREEN_COLOR} open ${outputHTMLPath} ${CLI_RESET_COLOR}`
     );
+    console.log('HINTS:')
+    console.log(`If you need help, please ${CLI_GREEN_COLOR}mditss --help${CLI_RESET_COLOR}`);
 }
 
 run();
