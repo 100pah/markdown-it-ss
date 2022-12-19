@@ -42,7 +42,7 @@ function printHelp() {
     // ${toc}, [[toc]], [toc], [[_toc_]] are OK.
     console.log(`If you need TOC, please add ${CLI_CYAN_COLOR}[[toc]]${CLI_RESET_COLOR} in your markdown.`);
     console.log();
-    console.log(`If you need video, convert mov to awebp by ${CLI_CYAN_COLOR}ffmpegmov2mp4 assets/some.mov${CLI_RESET_COLOR}`);
+    console.log(`If you need video, convert mov to mp4 by ${CLI_CYAN_COLOR}ffmpegmov2mp4 assets/some.mov${CLI_RESET_COLOR}`);
     console.log();
     console.log(`If you need multiple images in a line:`);
     console.log(`${CLI_CYAN_COLOR}
