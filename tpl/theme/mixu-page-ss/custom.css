@@ -20,7 +20,7 @@ body {
 
 .body-right {
     position: relative;
-    margin-left: 200px;
+    margin-left: 220px;
     padding: 100px 0;
 }
 
@@ -28,6 +28,8 @@ blockquote {
     border-left: 5px solid #ccc;
     color: #888;
     background: #eee;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 code {
@@ -55,6 +57,10 @@ ul {
     margin-inline-end: 0px;
     padding-inline-start: 40px; */
     padding-inline-start: 20px;
+    margin: 10px 0;
+}
+ul p {
+    margin: 0;
 }
 
 h2 {
@@ -65,6 +71,9 @@ h2 {
 h1, h2, h3, h4, h5, h6 {
     margin-top: 3.5em;
     margin-bottom: 2em;
+}
+h1 {
+    margin-bottom: 0.5em;
 }
 h2, h3, h4, h5, h6 {
     color: #393939;
@@ -78,6 +87,7 @@ hr {
 
 a {
     color: #045de6;
+    overflow-wrap: break-word;
 }
 
 video {
@@ -101,18 +111,23 @@ pre, pre.hljs {
 
 .table-of-contents {
     position: fixed;
-    top: 5px;
-    left: 5px;
+    top: 0;
+    left: 0;
     height: 100%;
     border-right: 1px solid #eee;
     font-size: 13px;
     overflow: auto;
-    padding: 10px;
-    width: 200px;
+    padding: 0;
+    width: 210px;
 }
 .table-of-contents ol {
     padding-left: 10px;
     margin: 0;
+    list-style-type: none;
+}
+.table-of-contents > ol {
+    margin-bottom: 40px;
+    width: 200px;
 }
 .table-of-contents > ol > li {
     margin-top: 16px;
@@ -120,17 +135,36 @@ pre, pre.hljs {
 .table-of-contents li {
     /* margin-top: 8px; */
     line-height: 1.5em;
+    white-space: nowrap;
 }
 .table-of-contents li a {
-    padding: 9px 7px 9px 5px;
+    padding: 9px 7px 9px 0;
     margin-top: -9px;
-    display: inline-block;
-    vertical-align: top;
+    display: flex;
 }
-.table-of-contents li::marker {
-    color: #aaa;
+.table-of-contents li a span {
+    white-space: initial;
+}
+.table-of-contents li::marker,
+.table-of-contents .toc-title-number {
+    color: rgb(89 153 154);
     display: inline-block;
     vertical-align: top;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+/* Use color to distinguish different level */
+.table-of-contents > ol > li::marker,
+.table-of-contents > ol > li > a > .toc-title-number {
+    color: #4295c7;
+}
+.table-of-contents > ol > li > ol > li::marker,
+.table-of-contents > ol > li > ol > li > a > .toc-title-number  {
+    color: #d49c60;
+}
+.table-of-contents > ol > li > ol > li > ol > li::marker,
+.table-of-contents > ol > li > ol > li > ol > li > a > .toc-title-number {
+    color: #2ca828;
 }
 .table-of-contents li a.active {
     background-color: rgb(209 230 249);
@@ -145,6 +179,11 @@ pre, pre.hljs {
 .table-of-contents a {
     color: #555;
     transition: all 100ms ease-in-out;
+}
+
+.content-title-number {
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 ul.img-line {
@@ -163,11 +202,14 @@ ul.img-line li {
     /* flex-grow: 1;
     flex-shrink: 1; */
 }
-ul.img-line li img {
+ul.img-line li img, ul.img-line li video {
     max-height: 100%;
     /* min-width: 100%; */
     object-fit: cover;
     vertical-align: top;
+}
+img {
+    cursor: pointer;
 }
 
 #img-large-view {
@@ -184,6 +226,8 @@ ul.img-line li img {
     left: 0;
     right: 0;
     bottom: 0;
+    max-width: 100%;
+    max-height: 100%;
     margin: auto;
 }
 /* #img-large-view-close {
@@ -204,3 +248,8 @@ ul.img-line li img {
     z-index: 999;
 } */
 
+.caption {
+    text-align: center;
+    color: #777;
+    font-size: 14px;
+}

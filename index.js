@@ -57,6 +57,9 @@ function printHelp() {
     <li style="flex: 5"><img src="assets/my_img2.png"/></li>
 </ul>
     ${CLI_RESET_COLOR}`);
+    console.log();
+    console.log(`If you need image caption:`);
+    console.log(`<div class="caption">xxxxxx</div>`);
 }
 
 console.log(`${CLI_GREEN_COLOR} src path: "${SRC_PATH}" ${CLI_RESET_COLOR}`);
